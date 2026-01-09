@@ -49,51 +49,32 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      // Verify token and get user info
-      axios
-        .get("/api/auth/me")
-        .then((response) => {
-          if (response.data.success && response.data.user) {
-            setUser(response.data.user);
-          }
-        })
-        .catch((error) => {
-          console.error("Auth check error:", error);
-          localStorage.removeItem("token");
-        });
+      // Mock user for development
+      const mockUser = {
+        username: "Officer Sharma",
+        role: "Admin",
+        office: "Kathmandu Metro",
+      };
+      setUser(mockUser);
     }
   }, []);
 
   const login = async (username, password) => {
-    setLoading(true);
-    try {
-      const response = await axios.post("/api/auth/login", {
-        username,
-        password,
-      });
-      const { token, user } = response.data;
-      localStorage.setItem("token", token);
-      setUser(user);
+    // Mock login - no backend required
+    const mockUser = {
+      username: "Officer Sharma",
+      role: "Admin",
+      office: "Kathmandu Metro",
+    };
+    localStorage.setItem("token", "mock-token");
+    setUser(mockUser);
       return { success: true };
-    } catch (error) {
-      return {
-        success: false,
-        message: error.response?.data?.message || "Login failed",
-      };
-    } finally {
-      setLoading(false);
-    }
   };
 
   const logout = async () => {
-    try {
-      await axios.post("/api/auth/logout");
-    } catch (error) {
-      console.error("Logout error:", error);
-    } finally {
+    // Mock logout - no backend required
       localStorage.removeItem("token");
       setUser(null);
-    }
   };
 
   const value = {
